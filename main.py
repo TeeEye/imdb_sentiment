@@ -6,6 +6,7 @@ import torch.nn as nn
 import torch.optim as optim
 from itertools import chain
 import gensim
+import gensim.downloader as api
 # import time
 
 
@@ -22,7 +23,9 @@ def run():
     print('Data loaded with vocabulary size: ', vocab_size)
 
     print('Building embedding dict...')
-    word2vec = gensim.models.KeyedVectors.load_word2vec_format(EMBEDDING_PATH, binary=False, encoding='utf-8')
+    api.info('glove-wiki-gigaword-100')
+    word2vec = api.load("glove-wiki-gigaword-100")
+    # word2vec = gensim.models.KeyedVectors.load_word2vec_format(EMBEDDING_PATH, binary=False, encoding='utf-8')
     word2idx = {word: idx+1 for idx, word in enumerate(vocab)}
     word2idx[UNK_STR] = UNK_TOKEN
     idx2word = {idx+1: word for idx, word in enumerate(vocab)}

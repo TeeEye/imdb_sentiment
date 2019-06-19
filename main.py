@@ -6,16 +6,16 @@ import torch.nn as nn
 import torch.optim as optim
 from itertools import chain
 import gensim
-import time
+# import time
 
 
 def run():
     print('Loading data...')
     train_data = load_imdb(IMDB_DATA_PATH, test=False)
-    test_data = load_imdb(IMDB_DATA_PATH, test=True)
+    # test_data = load_imdb(IMDB_DATA_PATH, test=True)
 
     train_tokenized = [tokenize(sentence) for sentence, _ in train_data]
-    test_tokenized = [tokenize(sentence) for sentence, _ in test_data]
+    # test_tokenized = [tokenize(sentence) for sentence, _ in test_data]
 
     vocab = set(chain(*train_tokenized))
     vocab_size = len(vocab)
@@ -32,10 +32,11 @@ def run():
     print('Generating ready-to-train data')
     train_features = torch.tensor(pad_sentences(idx_sentences(train_tokenized, word2idx)))
     train_labels = torch.tensor([label for _, label in train_data])
-    test_features = torch.tensor(pad_sentences(idx_sentences(test_tokenized, word2idx)))
-    test_labels = torch.tensor([label for _, label in test_data])
+    # test_features = torch.tensor(pad_sentences(idx_sentences(test_tokenized, word2idx)))
+    # test_labels = torch.tensor([label for _, label in test_data])
     print('Done')
 
+    embed_size = 100
     weight = torch.zeros(vocab_size+1, embed_size)
     for i in range(len(word2vec.index2word)):
         try:
@@ -60,15 +61,15 @@ def run():
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
 
     train_set = TensorDataset(train_features, train_labels)
-    test_set = TensorDataset(test_features, test_labels)
+    # test_set = TensorDataset(test_features, test_labels)
     train_iter = DataLoader(train_set, batch_size=batch_size, shuffle=True)
-    test_iter = DataLoader(test_set, batch_size=batch_size, shuffle=False)
+    # test_iter = DataLoader(test_set, batch_size=batch_size, shuffle=False)
 
     print('Start training...')
     for epoch in range(n_epochs):
-        start = time.time()
-        train_loss, test_less = 0, 0
-        train_acc, test_acc = 0, 0
+        # start = time.time()
+        # train_loss, test_less = 0, 0
+        # train_acc, test_acc = 0, 0
         n, m = 0, 0
         for feature, label in train_iter:
             n += 1
@@ -81,6 +82,6 @@ def run():
             loss.backward()
             optimizer.step()
 
+
 if __name__ == '__main__':
     run()
-

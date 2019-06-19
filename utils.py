@@ -55,4 +55,3 @@ def pad_sentences(sentences, max_len=500, pad_token=0):
             padded_sentence.append(pad_token)
         padded_sentences.append(padded_sentence)
     return padded_sentences
-

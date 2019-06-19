@@ -1,6 +1,7 @@
 import torch
-import torch.nn as nn
 from utils import *
+from config import *
+
 
 class SentimentNet(nn.Module):
     def __init__(self, embed_size, hidden_size, n_layers, bidirectional, weight, n_labels):
@@ -13,12 +14,13 @@ class SentimentNet(nn.Module):
         self.decoder = nn.Linear(hidden_size * (2 if bidirectional else 1), n_labels)
 
     def forward(self, x):
-        lens = torch.zeros(x.size(0), 1)
+        lens = []
         for i in range(x.size(0)):
             j = x.size(1) - 1
             while j > 0 and x[i][j] == 0:
                 j -= 1
-            lens[i][0] = j
+            lens.append(j)
+        lens = torch.tensor(lens).long().to(DEVICE)
         x = self.embedding(x)
         outputs = run_rnn(self.encoder, x, lens)
         x = self.decoder(outputs[:, -1])

@@ -1,3 +1,4 @@
+import os
 from utils import *
 from config import *
 from model import SentimentNet
@@ -59,6 +60,8 @@ def run():
 
     model = SentimentNet(embed_size=embed_size, hidden_size=hidden_size,
                          n_layers=n_layers, bidirectional=bidirectional, weight=weight, n_labels=n_labels)
+    if os.path.exists(MODEL_PATH):
+        model = torch.load(MODEL_PATH)
     model = model.to(DEVICE)
     loss_func = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
@@ -84,6 +87,8 @@ def run():
             print('Train step: %d, loss: %.3f' % (n, loss.item()))
             loss.backward()
             optimizer.step()
+
+    torch.save(model, MODEL_PATH)
 
 
 if __name__ == '__main__':

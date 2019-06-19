@@ -11,7 +11,7 @@ class SentimentNet(nn.Module):
         self.encoder = nn.LSTM(input_size=embed_size, hidden_size=hidden_size,
                                num_layers=n_layers, bidirectional=bidirectional,
                                batch_first=True, dropout=0)
-        self.decoder = nn.Linear(hidden_size * (2 if bidirectional else 1), n_labels)
+        self.decoder = nn.Linear(hidden_size * (2 if bidirectional else 1), 1)
 
     def forward(self, x):
         lens = []
@@ -23,5 +23,5 @@ class SentimentNet(nn.Module):
         lens = torch.tensor(lens).long().to(DEVICE)
         x = self.embedding(x)
         outputs = run_rnn(self.encoder, x, lens)
-        x = self.decoder(outputs[:, -1])
+        x = self.decoder(outputs)
         return x

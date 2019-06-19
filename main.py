@@ -77,7 +77,6 @@ def run():
         for feature, label in train_iter:
             n += 1
             model.zero_grad()
-            feature = feature.to(DEVICE)
             label = label.to(DEVICE)
             pred = model(feature)
             loss = loss_func(pred, label)

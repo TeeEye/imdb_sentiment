@@ -14,5 +14,5 @@ class SentimentNet(nn.Module):
     def forward(self, x):
         x = self.embedding(x)
         outputs, _ = self.encoder(x)
-        x = self.decoder(outputs[-1])
+        x = self.decoder(outputs[:, -1])
         return x

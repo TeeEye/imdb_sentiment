@@ -53,7 +53,7 @@ def run():
     hidden_size = 100
     n_layers = 2
     bidirectional = True
-    batch_size = 64
+    batch_size = 512
     n_labels = 2
     learning_rate = 0.5
 

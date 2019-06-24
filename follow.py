@@ -37,7 +37,10 @@ train_data, valid_data = train_data.split(random_state=random.seed(SEED))
 
 MAX_VOCAB_SIZE = 25_000
 
-TEXT.build_vocab(train_data, max_size=MAX_VOCAB_SIZE)
+TEXT.build_vocab(train_data,
+                 max_size=MAX_VOCAB_SIZE,
+                 vectors = 'glove.6B.100d',
+                 unk_init = torch.Tensor.normal_)
 LABEL.build_vocab(train_data)
 
 print('Most common words: ', TEXT.vocab.freqs.most_common(20))
@@ -66,6 +69,9 @@ crit = nn.BCEWithLogitsLoss()
 
 model = model.to(DEVICE)
 crit = crit.to(DEVICE)
+
+pretrained_embeddings = TEXT.vocab.vectors
+model.embedding.weight.data.copy_(pretrained_embeddings)
 
 
 def binary_accuracy(preds, y):
